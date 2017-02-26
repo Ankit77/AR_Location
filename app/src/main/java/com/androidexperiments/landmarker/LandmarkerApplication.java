@@ -1,9 +1,12 @@
 package com.androidexperiments.landmarker;
 
 import android.app.Application;
+import android.graphics.Point;
 import android.util.Log;
 
 import com.google.creativelabs.androidexperiments.typecompass.R;
+
+import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -16,6 +19,7 @@ public class LandmarkerApplication extends Application
     private int deviceHeight;
     private int deviceWidth;
     private static LandmarkerApplication mInstance = null;
+    private ArrayList<Point> placeXY=new ArrayList<>();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -29,6 +33,14 @@ public class LandmarkerApplication extends Application
         );
         mInstance=this;
 
+    }
+
+    public ArrayList<Point> getPlaceXY() {
+        return placeXY;
+    }
+
+    public void setPlaceXY(ArrayList<Point> placeXY) {
+        this.placeXY = placeXY;
     }
 
     public static LandmarkerApplication getmInstance() {

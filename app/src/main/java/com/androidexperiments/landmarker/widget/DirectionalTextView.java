@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -27,6 +28,22 @@ import de.greenrobot.event.EventBus;
 public class DirectionalTextView extends FrameLayout {
     private int k = 0;
     private static final String TAG = DirectionalTextView.class.getSimpleName();
+    private static final double OFFSET = 268435456;
+    private static final double RADIUS = OFFSET / Math.PI;
+
+    private static long lonToX(double lon) {
+        return Math.round(OFFSET + RADIUS * Math.toRadians(lon));
+    }
+
+    private static long latToY(double lat) {
+        return Math.round(
+                OFFSET - RADIUS * (Math.log(
+                        (1 + Math.sin(Math.toRadians(lat)))
+                                /
+                                (1 - Math.sin(Math.toRadians(lat)))
+                )) / 2
+        );
+    }
 
     /**
      * largest amount allowed to move across screen with easing, larger amounts, like
@@ -125,14 +142,22 @@ public class DirectionalTextView extends FrameLayout {
                 textview[i].setId(i);
                 textview[i].setText(mPlaces.get(i).getName());
                 textview[i].setTextColor(Color.RED);
+                double x = (mPlaces.get(i).getLang() * 1080) / 360;
+                double y = (mPlaces.get(i).getLat() * 1740) / 180;
+
+                double x1 = lonToX(mPlaces.get(i).getLang());
+                double y1 = latToY(mPlaces.get(i).getLat());
+
+                Log.e("POSITION", "POSITION - " + x1);
+                Log.e("POSITION", "POSITION - " + y1);
 
 //                int x =  (int) ((LandmarkerApplication.getmInstance().getDeviceWidth()/360.0) * (180 + mPlaces.get(i).getLang()));
 //                int y =  (int) ((LandmarkerApplication.getmInstance().getDeviceHeight()/180.0) * (90 - mPlaces.get(i).getLat()));
                 Random r = new Random();
-                int x = r.nextInt(LandmarkerApplication.getmInstance().getDeviceWidth());
-                int y = r.nextInt(LandmarkerApplication.getmInstance().getDeviceHeight());
-                textview[i].setX(x);
-                textview[i].setY(y);
+//                int x = r.nextInt(1080);
+//                int y = r.nextInt(LandmarkerApplication.getmInstance().getDeviceHeight());
+                textview[i].setX(LandmarkerApplication.getmInstance().getPlaceXY().get(i).x);
+                textview[i].setY(LandmarkerApplication.getmInstance().getPlaceXY().get(i).y);
                 textview[i].setSingleLine(true);
                 textview[i].setSingleLine(true);
                 textview[i].setGravity(Gravity.CENTER);
