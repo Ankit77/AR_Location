@@ -29,7 +29,9 @@ import com.google.creativelabs.androidexperiments.typecompass.R;
 import java.util.List;
 
 import se.walkercrou.places.GooglePlaces;
+import se.walkercrou.places.Param;
 import se.walkercrou.places.Place;
+import se.walkercrou.places.TypeParam;
 
 /**
  * Created by ANKIT on 2/26/2017.
@@ -50,6 +52,7 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
     private int mapWidth;
     private int mapHeight;
 
+
     private void buildPlacesApi() {
         mPlacesApi = new GooglePlaces(PLACES_API_KEY);
     }
@@ -68,6 +71,7 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
                 .build();
         mGoogleApiClient.connect();
         buildPlacesApi();
+
     }
 
     @Override
@@ -132,9 +136,10 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
         @Override
         protected List<Place> doInBackground(Void... params) {
             List<Place> places = null;
-
+            Param param = new Param("type");
+            param.value("atm");
             try {
-                places = mPlacesApi.getNearbyPlaces(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MAX_RADIUS, 60);
+                places = mPlacesApi.getNearbyPlaces(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MAX_RADIUS, 60, param);
             } catch (Exception e) {
                 //if getNearbyPlaces fails, return null and directional will do what it needs to
                 e.printStackTrace();

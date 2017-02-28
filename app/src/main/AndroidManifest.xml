@@ -37,6 +37,11 @@
         <activity
             android:name="com.androidexperiments.landmarker.NearbyLocationActivity"
             android:screenOrientation="landscape">
+
+        </activity>
+        <activity
+            android:name="com.androidexperiments.landmarker.PlaceCategoryActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
