@@ -38,8 +38,11 @@ public class PlaceCategoryAdapter extends RecyclerView.Adapter<PlaceCategoryAdap
 
     @Override
     public void onBindViewHolder(PlaceCategoryAdapter.ViewHolder viewHolder, final int i) {
-
+        final PlaceCategoryModel placeCategoryModel = categoryList.get(i);
         viewHolder.tvCategory.setText(categoryList.get(i).getPlaceCategory());
+        viewHolder.chkCategory.setOnCheckedChangeListener(null);
+        viewHolder.chkCategory.setChecked(placeCategoryModel.isSelect());
+
         Glide.with(context).load(categoryList.get(i).getPlaceUrl())
                 .thumbnail(0.5f).placeholder(R.mipmap.ic_launcher)
                 .crossFade()
@@ -48,7 +51,7 @@ public class PlaceCategoryAdapter extends RecyclerView.Adapter<PlaceCategoryAdap
         viewHolder.chkCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                categoryList.get(i).setSelect(isChecked);
+                placeCategoryModel.setSelect(isChecked);
             }
         });
     }
