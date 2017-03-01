@@ -50,7 +50,7 @@
     <style name="TitleText">
         <item name="fontPath">fonts/texgyreheros-bold.otf</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">85sp</item>
+        <item name="android:textSize">60sp</item>
     </style>
 
     <style name="ButtonStyle" parent="NormalText">

@@ -14,7 +14,6 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,7 +30,6 @@ import java.util.List;
 import se.walkercrou.places.GooglePlaces;
 import se.walkercrou.places.Param;
 import se.walkercrou.places.Place;
-import se.walkercrou.places.TypeParam;
 
 /**
  * Created by ANKIT on 2/26/2017.
@@ -153,6 +151,7 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 if (places != null && places.size() > 0) {
+                    LandmarkerApplication.getmInstance().setPlaces(places);
                     for (int i = 0; i < places.size(); i++) {
                         LatLng sydney = new LatLng(places.get(i).getLatitude(), places.get(i).getLongitude());
                         Marker marker = map.addMarker(new MarkerOptions()
