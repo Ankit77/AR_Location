@@ -47,9 +47,7 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
     private GooglePlaces mPlacesApi;
     private static final String PLACES_API_KEY = "AIzaSyAGvJJTXVY_OGyqlbiiFU9fUXIMG5hAu8I";
     private static final double MAX_RADIUS = 1000;
-    private int mapWidth;
-    private int mapHeight;
-
+    private String placeCategory;
 
     private void buildPlacesApi() {
         mPlacesApi = new GooglePlaces(PLACES_API_KEY);
@@ -59,6 +57,10 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby);
+
+        if (getIntent().getExtras() != null) {
+            placeCategory = getIntent().getExtras().getString("CATEGORY");
+        }
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
 
@@ -75,8 +77,6 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        mapWidth = mapView.getMeasuredWidth();
-        mapHeight = mapView.getMeasuredHeight();
         LatLng currentlocation = null;
         if (mLastLocation != null) {
             currentlocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
@@ -135,7 +135,7 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
         protected List<Place> doInBackground(Void... params) {
             List<Place> places = null;
             Param param = new Param("type");
-            param.value("atm");
+            param.value(placeCategory);
             try {
                 places = mPlacesApi.getNearbyPlaces(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MAX_RADIUS, 60, param);
             } catch (Exception e) {

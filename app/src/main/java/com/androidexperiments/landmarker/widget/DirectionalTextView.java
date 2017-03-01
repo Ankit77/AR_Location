@@ -3,20 +3,20 @@ package com.androidexperiments.landmarker.widget;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidexperiments.landmarker.LandmarkerApplication;
 import com.androidexperiments.landmarker.data.NearbyPlace;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.creativelabs.androidexperiments.typecompass.R;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -134,16 +134,12 @@ public class DirectionalTextView extends FrameLayout {
         mPlaces = places;
 
         if (mPlaces.size() > 0) {
-            final TextView[] textview = new TextView[mPlaces.size()];
+            final ImageView[] imageView = new ImageView[mPlaces.size()];
             for (int i = 0; i < mPlaces.size(); i++) {
-                textview[i] = new TextView(mcontext);
-                FrameLayout.LayoutParams Params1 = new FrameLayout.LayoutParams(300, 100);
-                textview[i].setLayoutParams(Params1);
-                textview[i].setId(i);
-                textview[i].setText(mPlaces.get(i).getName());
-                textview[i].setTextColor(Color.RED);
-                double x = (mPlaces.get(i).getLang() * 1080) / 360;
-                double y = (mPlaces.get(i).getLat() * 1740) / 180;
+                imageView[i] = new ImageView(mcontext);
+                FrameLayout.LayoutParams Params1 = new FrameLayout.LayoutParams(150, 150);
+                imageView[i].setLayoutParams(Params1);
+                imageView[i].setId(i);
 
                 double x1 = lonToX(mPlaces.get(i).getLang());
                 double y1 = latToY(mPlaces.get(i).getLat());
@@ -151,31 +147,70 @@ public class DirectionalTextView extends FrameLayout {
                 Log.e("POSITION", "POSITION - " + x1);
                 Log.e("POSITION", "POSITION - " + y1);
 
-//                int x =  (int) ((LandmarkerApplication.getmInstance().getDeviceWidth()/360.0) * (180 + mPlaces.get(i).getLang()));
-//                int y =  (int) ((LandmarkerApplication.getmInstance().getDeviceHeight()/180.0) * (90 - mPlaces.get(i).getLat()));
-                Random r = new Random();
-//                int x = r.nextInt(1080);
-//                int y = r.nextInt(LandmarkerApplication.getmInstance().getDeviceHeight());
-                textview[i].setX(LandmarkerApplication.getmInstance().getPlaceXY().get(i).x);
-                textview[i].setY(LandmarkerApplication.getmInstance().getPlaceXY().get(i).y);
-                textview[i].setSingleLine(true);
-                textview[i].setSingleLine(true);
-                textview[i].setGravity(Gravity.CENTER);
-                textview[i].setEllipsize(TextUtils.TruncateAt.END);
-                textview[i].setBackgroundResource(R.drawable.rounded_corner);
-                //textview[i].setBackgroundResource(R.drawable.custom_poi_label);
-                textview[i].setOnClickListener(new OnClickListener() {
+                imageView[i].setX(LandmarkerApplication.getmInstance().getPlaceXY().get(i).x);
+                imageView[i].setY(LandmarkerApplication.getmInstance().getPlaceXY().get(i).y);
+                imageView[i].setBackgroundColor(Color.TRANSPARENT);
+                Glide.with(mcontext).load(mPlaces.get(i).getPlaceurl())
+                        .thumbnail(0.5f).placeholder(R.drawable.location_pin)
+                        .crossFade()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(imageView[i]);
+                imageView[i].setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        mCurrentPlace = event.place;
 //                        showMapsButtonView();
                         if (onPlaceClick != null) {
-                            onPlaceClick.onClick(mPlaces.get(((TextView) v).getId()));
+                            onPlaceClick.onClick(mPlaces.get(((ImageView) v).getId()));
                         }
 //                        Toast.makeText(mcontext, ((TextView) v).getText().toString(), Toast.LENGTH_LONG).show();
                     }
                 });
-                flMain.addView(textview[i]);
+                flMain.addView(imageView[i]);
+
+
+//                final TextView[] textview = new TextView[mPlaces.size()];
+//                for (int i = 0; i < mPlaces.size(); i++) {
+//                    textview[i] = new TextView(mcontext);
+//                    FrameLayout.LayoutParams Params1 = new FrameLayout.LayoutParams(300, 100);
+//                    textview[i].setLayoutParams(Params1);
+//                    textview[i].setId(i);
+//                    textview[i].setText(mPlaces.get(i).getName());
+//                    textview[i].setTextColor(Color.RED);
+//                    double x = (mPlaces.get(i).getLang() * 1080) / 360;
+//                    double y = (mPlaces.get(i).getLat() * 1740) / 180;
+//
+//                    double x1 = lonToX(mPlaces.get(i).getLang());
+//                    double y1 = latToY(mPlaces.get(i).getLat());
+//
+//                    Log.e("POSITION", "POSITION - " + x1);
+//                    Log.e("POSITION", "POSITION - " + y1);
+//
+////                int x =  (int) ((LandmarkerApplication.getmInstance().getDeviceWidth()/360.0) * (180 + mPlaces.get(i).getLang()));
+////                int y =  (int) ((LandmarkerApplication.getmInstance().getDeviceHeight()/180.0) * (90 - mPlaces.get(i).getLat()));
+//                    Random r = new Random();
+////                int x = r.nextInt(1080);
+////                int y = r.nextInt(LandmarkerApplication.getmInstance().getDeviceHeight());
+//                    textview[i].setX(LandmarkerApplication.getmInstance().getPlaceXY().get(i).x);
+//                    textview[i].setY(LandmarkerApplication.getmInstance().getPlaceXY().get(i).y);
+//                    textview[i].setSingleLine(true);
+//                    textview[i].setSingleLine(true);
+//                    textview[i].setGravity(Gravity.CENTER);
+//                    textview[i].setEllipsize(TextUtils.TruncateAt.END);
+//                    textview[i].setBackgroundResource(R.drawable.rounded_corner);
+//                    //textview[i].setBackgroundResource(R.drawable.custom_poi_label);
+//                    textview[i].setOnClickListener(new OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+////                        mCurrentPlace = event.place;
+////                        showMapsButtonView();
+//                            if (onPlaceClick != null) {
+//                                onPlaceClick.onClick(mPlaces.get(((TextView) v).getId()));
+//                            }
+////                        Toast.makeText(mcontext, ((TextView) v).getText().toString(), Toast.LENGTH_LONG).show();
+//                        }
+//                    });
+//                    flMain.addView(textview[i]);
 
             }
         }

@@ -16,12 +16,14 @@ public class NearbyPlace
     private String name;
     private double lat;
     private double lang;
+    private String placeurl;
 
-    public NearbyPlace(float distance, String name,double lat,double lang) {
+    public NearbyPlace(float distance, String name,double lat,double lang,String placeurl) {
         this.distance = distance;
         this.name = name;
         this.lat=lat;
         this.lang=lang;
+        this.placeurl=placeurl;
     }
 
     public float getDistance() {
@@ -39,5 +41,9 @@ public class NearbyPlace
 
     public double getLang() {
         return lang;
+    }
+
+    public String getPlaceurl() {
+        return placeurl;
     }
 }

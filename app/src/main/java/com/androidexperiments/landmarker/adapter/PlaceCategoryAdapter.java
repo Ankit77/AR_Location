@@ -25,6 +25,10 @@ public class PlaceCategoryAdapter extends RecyclerView.Adapter<PlaceCategoryAdap
     private ArrayList<PlaceCategoryModel> categoryList;
     private Context context;
 
+    public ArrayList<PlaceCategoryModel> getCategoryList() {
+        return categoryList;
+    }
+
     public PlaceCategoryAdapter(Context context, ArrayList<PlaceCategoryModel> categoryList) {
         this.categoryList = categoryList;
         this.context = context;

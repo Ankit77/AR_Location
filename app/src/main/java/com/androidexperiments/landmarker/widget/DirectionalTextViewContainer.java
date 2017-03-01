@@ -211,7 +211,7 @@ public class DirectionalTextViewContainer extends FrameLayout {
             float bearing = lastLocation.bearingTo(placeLoc);
             float distance = lastLocation.distanceTo(placeLoc);
 
-            NearbyPlace newPlace = new NearbyPlace(distance, place.getName(), place.getLatitude(), place.getLongitude());
+            NearbyPlace newPlace = new NearbyPlace(distance, place.getName(), place.getLatitude(), place.getLongitude(),place.getIconUrl());
 
             //simple but useful
             if (bearing > -45.f && bearing < 45.f) // north

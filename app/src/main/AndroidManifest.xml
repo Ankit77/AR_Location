@@ -41,7 +41,7 @@
         </activity>
         <activity
             android:name="com.androidexperiments.landmarker.PlaceCategoryActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait">
 
         </activity>
         <activity

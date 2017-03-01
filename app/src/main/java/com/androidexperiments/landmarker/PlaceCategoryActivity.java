@@ -1,5 +1,6 @@
 package com.androidexperiments.landmarker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -81,6 +82,20 @@ public class PlaceCategoryActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
+        if (v == btnNearBy) {
+            String placeCategory = "";
+            ArrayList<PlaceCategoryModel> mplaceCategory = new ArrayList<>();
+            mplaceCategory = placeCategoryAdapter.getCategoryList();
+            for (int i = 0; i < mplaceCategory.size(); i++) {
+                if (mplaceCategory.get(i).isSelect()) {
+                    placeCategory = placeCategory + mplaceCategory.get(i).getPlaceCategory() + "|";
+                }
+            }
+            placeCategory = placeCategory.substring(0, placeCategory.length()-1);
+            Intent intent = new Intent(PlaceCategoryActivity.this, NearbyLocationActivity.class);
+            intent.putExtra("CATEGORY", placeCategory);
+            startActivity(intent);
 
+        }
     }
 }
