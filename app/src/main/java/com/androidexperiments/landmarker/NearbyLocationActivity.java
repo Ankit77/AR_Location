@@ -25,6 +25,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.creativelabs.androidexperiments.typecompass.R;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import se.walkercrou.places.GooglePlaces;
@@ -135,7 +137,11 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
         protected List<Place> doInBackground(Void... params) {
             List<Place> places = null;
             Param param = new Param("type");
-            param.value(placeCategory);
+            try {
+                param.value(URLEncoder.encode(placeCategory, "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             try {
                 places = mPlacesApi.getNearbyPlaces(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MAX_RADIUS, 60, param);
             } catch (Exception e) {
