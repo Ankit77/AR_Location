@@ -46,4 +46,8 @@ public class NearbyPlace
     public String getPlaceurl() {
         return placeurl;
     }
+
+
+
+fgfgfg
 }
