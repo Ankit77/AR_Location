@@ -31,8 +31,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAGvJJTXVY_OGyqlbiiFU9fUXIMG5hAu8I" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDiTUu7abaduX9Pn0jSO9_kZEsY2j_eaUg" />
+        <!--<meta-data-->
+        <!--android:name="com.google.android.maps.v2.API_KEY"-->
+        <!--android:value="AIzaSyDiTUu7abaduX9Pn0jSO9_kZEsY2j_eaUg" />-->
 
         <activity
             android:name="com.androidexperiments.landmarker.NearbyLocationActivity"
@@ -48,11 +51,7 @@
             android:name="com.androidexperiments.landmarker.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.androidexperiments.landmarker.MainActivity"
@@ -64,6 +63,21 @@
             android:name="com.androidexperiments.landmarker.TutorialActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"></activity>
+        <activity
+            android:name="com.androidexperiments.landmarker.PlaceDetailActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name="com.androidexperiments.landmarker.PlaceDirectionActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

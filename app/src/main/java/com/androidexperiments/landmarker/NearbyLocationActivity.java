@@ -11,10 +11,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.androidexperiments.landmarker.util.Const;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -47,12 +49,13 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
     private Location mLastLocation;
     private AsyncLoadNearbyPlace asyncLoadNearbyPlace;
     private GooglePlaces mPlacesApi;
-    private static final String PLACES_API_KEY = "AIzaSyAGvJJTXVY_OGyqlbiiFU9fUXIMG5hAu8I";
+//    private static final String PLACES_API_KEY = "AIzaSyAGvJJTXVY_OGyqlbiiFU9fUXIMG5hAu8I";
+
     private static final double MAX_RADIUS = 1000;
     private String placeCategory;
 
     private void buildPlacesApi() {
-        mPlacesApi = new GooglePlaces(PLACES_API_KEY);
+        mPlacesApi = new GooglePlaces(Const.PLACES_API_KEY);
     }
 
     @Override
@@ -66,8 +69,11 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
 
+
         mGoogleApiClient = new GoogleApiClient.Builder(NearbyLocationActivity.this)
                 .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
@@ -152,7 +158,7 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
         }
 
         @Override
-        protected void onPostExecute(List<Place> places) {
+        protected void onPostExecute(final List<Place> places) {
             super.onPostExecute(places);
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
@@ -176,6 +182,8 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
+
                         startActivity(new Intent(NearbyLocationActivity.this, MainActivity.class));
                     }
                 }, 5000);
