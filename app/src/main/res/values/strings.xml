@@ -13,4 +13,6 @@
     <string name="about_app">Landmarker was created by Anthony Tripaldi at the Google Creative Lab. Go to androidexperiments.com to see other experiments.</string>
     <string name="about_github">Code is open sourced and can be found at\nhttps://github.com/googlecreativelab/landmarker</string>
     <string name="alert_internet_connectivity">Please check internet connection</string>
+    <string name="lable_map">Map</string>
+    <string name="label_call">Call</string>
 </resources>
