@@ -15,4 +15,6 @@
     <string name="alert_internet_connectivity">Please check internet connection</string>
     <string name="lable_map">Map</string>
     <string name="label_call">Call</string>
+    <string name="alert_open_now">OPEN RIGHT NOW</string>
+    <string name="alert_close_now">CLOSE RIGHT NOW</string>
 </resources>

@@ -25,6 +25,9 @@ import com.google.creativelabs.androidexperiments.typecompass.R;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class Utils {
@@ -399,7 +402,6 @@ public class Utils {
     }
 
 
-
 //    public static synchronized void setKeywordListHighlighted(Context context, TextView view, String fulltext, List<String> subtextList) {
 //        view.setText(fulltext, TextView.BufferType.SPANNABLE);
 //        if (subtextList != null && subtextList.size() > 0) {
@@ -409,5 +411,17 @@ public class Utils {
 //        }
 //    }
 
+    public static String convertMilistoTime(long milisec) {
+        try {
+            Date date = new Date(milisec);
+            DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
+            String dateFormatted = formatter.format(date);
+            return dateFormatted;
+        } catch (Exception e) {
+            return "";
+
+        }
+
+    }
 
 }
