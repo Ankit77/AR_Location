@@ -1,6 +1,7 @@
 package com.androidexperiments.landmarker;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 import com.androidexperiments.landmarker.adapter.PlaceCategoryAdapter;
 import com.androidexperiments.landmarker.model.PlaceCategoryModel;
+import com.androidexperiments.landmarker.seekbar.MarkerSeekBar;
+import com.androidexperiments.landmarker.util.Const;
 import com.google.creativelabs.androidexperiments.typecompass.R;
 
 import java.util.ArrayList;
@@ -25,6 +29,7 @@ public class PlaceCategoryActivity extends AppCompatActivity implements View.OnC
     private RecyclerView rvCategory;
     private PlaceCategoryAdapter placeCategoryAdapter;
     private Button btnNearBy;
+    private MarkerSeekBar markerSeekBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,12 +37,32 @@ public class PlaceCategoryActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_placecategory);
         btnNearBy = (Button) findViewById(R.id.activity_placecategory_btn_nearbyplace);
         rvCategory = (RecyclerView) findViewById(R.id.activity_placecategory_rvCategory);
+        markerSeekBar = (MarkerSeekBar) findViewById(R.id.activity_placecategory_sbRadius);
         loadCategory();
         placeCategoryAdapter = new PlaceCategoryAdapter(PlaceCategoryActivity.this, placeCategory);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(PlaceCategoryActivity.this);
         rvCategory.setLayoutManager(mLayoutManager);
         rvCategory.setAdapter(placeCategoryAdapter);
         btnNearBy.setOnClickListener(this);
+        markerSeekBar.setProgress(10);
+        markerSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                SharedPreferences.Editor editor=  LandmarkerApplication.getmInstance().getSharedPreferences().edit();
+                editor.putInt(Const.PREF_RADIUS,i);
+                editor.commit();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private void loadCategory() {
@@ -91,7 +116,7 @@ public class PlaceCategoryActivity extends AppCompatActivity implements View.OnC
                     placeCategory = placeCategory + mplaceCategory.get(i).getPlaceCategory() + "|";
                 }
             }
-            placeCategory = placeCategory.substring(0, placeCategory.length()-1);
+            placeCategory = placeCategory.substring(0, placeCategory.length() - 1);
             Intent intent = new Intent(PlaceCategoryActivity.this, NearbyLocationActivity.class);
             intent.putExtra("CATEGORY", placeCategory);
             startActivity(intent);

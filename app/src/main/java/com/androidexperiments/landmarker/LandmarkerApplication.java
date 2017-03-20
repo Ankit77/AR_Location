@@ -1,6 +1,8 @@
 package com.androidexperiments.landmarker;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.Location;
 import android.util.Log;
@@ -28,7 +30,7 @@ public class LandmarkerApplication extends Application {
     private List<Place> places = new ArrayList<>();
     private List<Photo> placesphotos = new ArrayList<>();
     private DirectionModel directionModel;
-
+    private SharedPreferences sharedPreferences;
     public DirectionModel getDirectionModel() {
         return directionModel;
     }
@@ -42,7 +44,7 @@ public class LandmarkerApplication extends Application {
         super.onCreate();
 
         Log.d(TAG, "oh nooo");
-
+        sharedPreferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/texgyreheros-bold.otf")
                 .setFontAttrId(R.attr.fontPath)
@@ -105,5 +107,9 @@ public class LandmarkerApplication extends Application {
             this.placesphotos.clear();
         }
         this.placesphotos = placesphotos;
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 }

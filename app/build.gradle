@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.app.gopiproject"
-        minSdkVersion 17
+        minSdkVersion 18
         targetSdkVersion 22
         versionCode 3
         versionName "1.0.0"
@@ -25,6 +25,7 @@ android {
     packagingOptions {
         exclude 'LICENSE.txt'
     }
+
 }
 
 dependencies {

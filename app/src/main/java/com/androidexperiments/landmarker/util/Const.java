@@ -12,4 +12,8 @@ public class Const {
     public static final String KEY_ELAN = "ELAN";
     public static final String KEY_PLACENAME = "PLACENAME";
     public static final String KEY_TITLE = "TITLE";
+
+    public static final String PREF_RADIUS = "RADIUS";
+    public static final int DEFAULT_RADIUS = 5;
+
 }
