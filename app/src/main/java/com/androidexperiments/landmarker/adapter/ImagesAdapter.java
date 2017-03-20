@@ -23,7 +23,11 @@ import java.util.List;
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder> {
     private ArrayList<Photo> photoList = new ArrayList<>();
     private Context context;
+    private ImageClickListner imageClickListner;
 
+    public void setImageClickListner(ImageClickListner imageClickListner) {
+        this.imageClickListner = imageClickListner;
+    }
 
     public ImagesAdapter(Context context, List<Photo> photoList) {
         this.photoList.addAll(photoList);
@@ -39,16 +43,32 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int i) {
         String photourl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=" + photoList.get(i).getWidth() + "&photoreference=" + photoList.get(i).getPhotoReference() + "&key=" + Const.PLACES_API_KEY;
-        Glide.with(context).load(photourl)
-                .thumbnail(0.5f).placeholder(R.drawable.ic_placeholder)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(viewHolder.imgImage);
+        if (i == 3) {
+            viewHolder.imgImage.setImageResource(R.drawable.more_images);
+        } else {
+            Glide.with(context).load(photourl)
+                    .thumbnail(0.5f).placeholder(R.drawable.ic_placeholder)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(viewHolder.imgImage);
+        }
+        viewHolder.imgImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (imageClickListner != null) {
+                    imageClickListner.onImageClick(i);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return photoList.size();
+        if (photoList.size() > 4) {
+            return 4;
+        } else {
+            return photoList.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -58,5 +78,9 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
             super(view);
             imgImage = (ImageView) view.findViewById(R.id.row_images_placinfo_imgImages);
         }
+    }
+
+    public interface ImageClickListner {
+        public void onImageClick(int position);
     }
 }

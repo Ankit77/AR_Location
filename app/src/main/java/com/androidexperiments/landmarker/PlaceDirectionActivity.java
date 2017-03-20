@@ -1,13 +1,17 @@
 package com.androidexperiments.landmarker;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidexperiments.landmarker.adapter.DirectionAdapter;
@@ -48,11 +52,18 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
     private String endLan;
     private DirectionModel directionModel;
     private String placeName;
+    private TextView tvTitle;
+    private ImageView imgBack;
+    private String title;
+    private ImageView imgDirection;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placedirection);
+
+        tvTitle = (TextView) findViewById(R.id.activity_placedirection_tv_title);
+        imgBack = (ImageView) findViewById(R.id.activity_placedirection_img_back);
         directionModel = LandmarkerApplication.getmInstance().getDirectionModel();
         if (getIntent().getExtras() != null) {
             startLat = getIntent().getExtras().getString(Const.KEY_SLAT);
@@ -60,12 +71,30 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
             endLat = getIntent().getExtras().getString(Const.KEY_ELAT);
             endLan = getIntent().getExtras().getString(Const.KEY_ELAN);
             placeName = getIntent().getExtras().getString(Const.KEY_PLACENAME);
+            title = getIntent().getExtras().getString(Const.KEY_TITLE, "");
         }
         tvDistance = (TextView) findViewById(R.id.activity_placedirection_tv_totaldistance);
         rvDirection = (RecyclerView) findViewById(R.id.activity_placedirection_rvsteps);
+        imgDirection = (ImageView) findViewById(R.id.activity_placedirection_img_direction);
         mapView = (MapView) findViewById(R.id.activity_placedirection_mapview);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+        tvTitle.setText(title);
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        imgDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?saddr=" + startLat + "," + startLan + "&daddr=" + endLat + "," + endLan));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                startActivity(intent);
+            }
+        });
 
     }
 

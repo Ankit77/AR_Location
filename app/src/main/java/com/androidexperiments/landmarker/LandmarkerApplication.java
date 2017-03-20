@@ -6,6 +6,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.androidexperiments.landmarker.model.direction.DirectionModel;
+import com.androidexperiments.landmarker.model.placedetail.Photo;
 import com.google.creativelabs.androidexperiments.typecompass.R;
 
 import java.util.ArrayList;
@@ -17,15 +18,15 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 /**
  * setup fonts and shit
  */
-public class LandmarkerApplication extends Application
-{
+public class LandmarkerApplication extends Application {
     private Location currentLocation;
     private static final String TAG = LandmarkerApplication.class.getSimpleName();
     private int deviceHeight;
     private int deviceWidth;
     private static LandmarkerApplication mInstance = null;
-    private ArrayList<Point> placeXY=new ArrayList<>();
-    private List<Place> places=new ArrayList<>();
+    private ArrayList<Point> placeXY = new ArrayList<>();
+    private List<Place> places = new ArrayList<>();
+    private List<Photo> placesphotos = new ArrayList<>();
     private DirectionModel directionModel;
 
     public DirectionModel getDirectionModel() {
@@ -43,11 +44,11 @@ public class LandmarkerApplication extends Application
         Log.d(TAG, "oh nooo");
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/texgyreheros-bold.otf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
+                .setDefaultFontPath("fonts/texgyreheros-bold.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
         );
-        mInstance=this;
+        mInstance = this;
 
     }
 
@@ -93,5 +94,16 @@ public class LandmarkerApplication extends Application
 
     public void setDeviceHeight(int deviceHeight) {
         this.deviceHeight = deviceHeight;
+    }
+
+    public List<Photo> getPlacesphotos() {
+        return placesphotos;
+    }
+
+    public void setPlacesphotos(List<Photo> placesphotos) {
+        if (this.placesphotos != null) {
+            this.placesphotos.clear();
+        }
+        this.placesphotos = placesphotos;
     }
 }

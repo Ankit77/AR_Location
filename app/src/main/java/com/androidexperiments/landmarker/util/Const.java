@@ -11,4 +11,5 @@ public class Const {
     public static final String KEY_ELAT = "ELAT";
     public static final String KEY_ELAN = "ELAN";
     public static final String KEY_PLACENAME = "PLACENAME";
+    public static final String KEY_TITLE = "TITLE";
 }

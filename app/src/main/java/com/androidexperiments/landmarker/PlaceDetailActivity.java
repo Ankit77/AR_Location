@@ -45,7 +45,7 @@ import java.util.List;
  * Created by indianic on 11/03/17.
  */
 
-public class PlaceDetailActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
+public class PlaceDetailActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, ImagesAdapter.ImageClickListner {
     private Place placeInfo;
     private String placeId;
     private AsyncLoadPlaceDetail asyncLoadPlaceDetail;
@@ -162,7 +162,9 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void loadPlacePhoto(List<Photo> photoList) {
+        LandmarkerApplication.getmInstance().setPlacesphotos(photoList);
         imagesAdapter = new ImagesAdapter(PlaceDetailActivity.this, photoList);
+        imagesAdapter.setImageClickListner(this);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvImages.setLayoutManager(layoutManager);
@@ -199,9 +201,9 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
             intent.putExtra(Const.KEY_ELAT, String.valueOf(endLocation.latitude));
             intent.putExtra(Const.KEY_ELAN, String.valueOf(endLocation.longitude));
             intent.putExtra(Const.KEY_PLACENAME, mPlaceDetailModel.getResult().getName());
+            intent.putExtra(Const.KEY_TITLE, mPlaceDetailModel.getResult().getName());
             startActivity(intent);
         } else if (view == llWebsite) {
-            String url = "http://www.google.com";
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mPlaceDetailModel.getResult().getWebsite()));
             startActivity(browserIntent);
         } else if (view == imgBack) {
@@ -230,6 +232,13 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+
+    @Override
+    public void onImageClick(int position) {
+        Intent intent = new Intent(PlaceDetailActivity.this, PlaceImageActivity.class);
+        intent.putExtra(Const.KEY_TITLE, mPlaceDetailModel.getResult().getName());
+        startActivity(intent);
     }
 
     private class AsyncLoadPlaceDetail extends AsyncTask<String, Void, PlaceDetailModel> {
@@ -290,8 +299,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
         protected DirectionModel doInBackground(String... strings) {
             String slat = strings[0];
             String slan = strings[1];
-            String elat = strings[0];
-            String elan = strings[1];
+            String elat = strings[2];
+            String elan = strings[3];
             wsGetDirection = new WSGetDirection(PlaceDetailActivity.this);
             return wsGetDirection.executeWebservice(slat, slan, elat, elan, Const.PLACES_API_KEY);
         }
