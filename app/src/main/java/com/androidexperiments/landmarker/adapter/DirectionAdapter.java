@@ -20,12 +20,10 @@ import java.util.ArrayList;
 
 public class DirectionAdapter extends RecyclerView.Adapter<DirectionAdapter.ViewHolder> {
     private ArrayList<Step> stepsList;
-    private Context context;
 
 
     public DirectionAdapter(Context context, ArrayList<Step> stepsList) {
         this.stepsList = stepsList;
-        this.context = context;
     }
 
     @Override

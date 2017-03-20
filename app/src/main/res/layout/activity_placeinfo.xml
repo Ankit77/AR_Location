@@ -16,7 +16,31 @@
             android:layout_height="58dp"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:titleTextColor="#ffffff"></android.support.v7.widget.Toolbar>
+            android:titleTextColor="#ffffff">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/activity_placeinfo_img_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_keyboard_backspace_white_24dp" />
+
+                <TextView
+                    android:id="@+id/activity_placeinfo_tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:text="sdsdsdsdsdsdsds"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_16sdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,19 +51,19 @@
 
             <LinearLayout
                 android:id="@+id/activity_placeinfo_ll_map"
-                android:layout_width="@dimen/_60sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_20sdp"
                 android:gravity="center"
                 android:orientation="vertical"
-
                 android:padding="@dimen/_5sdp">
 
                 <ImageView
                     android:id="@+id/activity_placeinfo_img_map"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_location" />
+                    android:src="@drawable/marker_line" />
 
                 <TextView
                     android:id="@+id/activity_placeinfo_tv_map"
@@ -48,13 +72,13 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:text="@string/lable_map"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/_14sdp" />
+                    android:textSize="@dimen/_10sdp" />
             </LinearLayout>
 
 
             <LinearLayout
                 android:id="@+id/activity_placeinfo_ll_call"
-                android:layout_width="@dimen/_60sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_20sdp"
                 android:gravity="center"
@@ -63,10 +87,10 @@
 
                 <ImageView
                     android:id="@+id/activity_placeinfo_img_call"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_call" />
+                    android:src="@drawable/phone_line" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -74,21 +98,22 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:text="@string/label_call"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/_14sdp" />
+                    android:textSize="@dimen/_10sdp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/activity_placeinfo_ll_website"
-                android:layout_width="@dimen/_70sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_20sdp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="@dimen/_5sdp">
 
                 <ImageView
                     android:id="@+id/activity_placeinfo_img_website"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:scaleType="fitXY"
                     android:src="@drawable/website_line" />
 
@@ -99,7 +124,7 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:text="Website"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/_14sdp" />
+                    android:textSize="@dimen/_10sdp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -120,14 +145,14 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/activity_placeinfo_img_placename"
+                    android:id="@+id/activity_placeinfo_tv_placename"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#8C000000"
                     android:padding="@dimen/_5sdp"
                     android:text="CASA Elimento"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/_18sdp" />
+                    android:textSize="@dimen/_14sdp" />
             </FrameLayout>
 
             <RelativeLayout
@@ -144,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:rating="4" />
+                    android:rating="1" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -160,9 +185,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
             android:background="@color/white"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -173,9 +199,10 @@
                 android:padding="@dimen/_5sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_location" />
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/marker_line" />
 
                 <TextView
                     android:id="@+id/activity_placeinfo_tv_addressfull"
@@ -202,8 +229,9 @@
                 android:padding="@dimen/_5sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/distance_black_alert" />
 
                 <TextView
@@ -231,9 +259,10 @@
                 android:padding="@dimen/_5sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_call" />
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/phone_line" />
 
                 <TextView
                     android:id="@+id/activity_placeinfo_tv_call"
@@ -260,8 +289,9 @@
                 android:padding="@dimen/_5sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/website_line" />
 
                 <TextView

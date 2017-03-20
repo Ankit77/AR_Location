@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 public class WorkingHourAdapter extends RecyclerView.Adapter<WorkingHourAdapter.ViewHolder> {
-    private ArrayList<String> workinghourList;
+    private ArrayList<String> workinghourList = new ArrayList<>();
     private Context context;
 
 

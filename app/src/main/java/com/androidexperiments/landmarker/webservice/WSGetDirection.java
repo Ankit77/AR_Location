@@ -19,8 +19,8 @@ public class WSGetDirection extends WebService {
     }
 
 
-    public DirectionModel executeWebservice(String source, String destination, String APIKEY) {
-        final String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + source + "&destination=" + destination + "&key=" + APIKEY;
+    public DirectionModel executeWebservice(String slat, String slan, String elat, String eLan, String APIKEY) {
+        final String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + slat + "," + slan + "&destination=" + elat + "," + eLan + "&key=" + APIKEY;
         return parseJSONResponse(GET(url));
 
     }

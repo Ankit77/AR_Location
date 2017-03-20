@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder> {
-    private ArrayList<Photo> photoList;
+    private ArrayList<Photo> photoList = new ArrayList<>();
     private Context context;
 
 

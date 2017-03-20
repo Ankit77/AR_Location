@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
-    private ArrayList<Review> reviewList;
+    private ArrayList<Review> reviewList=new ArrayList<>();
     private Context context;
 
 
@@ -32,7 +32,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_images_placeinfo, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_reviews_placeinfo, viewGroup, false);
         return new ViewHolder(view);
     }
 

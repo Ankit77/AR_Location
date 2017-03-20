@@ -17,10 +17,13 @@ import com.androidexperiments.landmarker.model.direction.Step;
 import com.androidexperiments.landmarker.util.Const;
 import com.androidexperiments.landmarker.util.Utils;
 import com.androidexperiments.landmarker.webservice.WSGetDirection;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.creativelabs.androidexperiments.typecompass.R;
 
@@ -39,12 +42,26 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
     private DirectionAdapter diretionAdapter;
     private ArrayList<Step> stepList;
     private TextView tvDistance;
+    private String startLat;
+    private String startLan;
+    private String endLat;
+    private String endLan;
+    private DirectionModel directionModel;
+    private String placeName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placedirection);
-        tvDistance=(TextView)findViewById(R.id.activity_placedirection_tv_totaldistance);
+        directionModel = LandmarkerApplication.getmInstance().getDirectionModel();
+        if (getIntent().getExtras() != null) {
+            startLat = getIntent().getExtras().getString(Const.KEY_SLAT);
+            startLan = getIntent().getExtras().getString(Const.KEY_SLAN);
+            endLat = getIntent().getExtras().getString(Const.KEY_ELAT);
+            endLan = getIntent().getExtras().getString(Const.KEY_ELAN);
+            placeName = getIntent().getExtras().getString(Const.KEY_PLACENAME);
+        }
+        tvDistance = (TextView) findViewById(R.id.activity_placedirection_tv_totaldistance);
         rvDirection = (RecyclerView) findViewById(R.id.activity_placedirection_rvsteps);
         mapView = (MapView) findViewById(R.id.activity_placedirection_mapview);
         mapView.onCreate(savedInstanceState);
@@ -62,11 +79,31 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        if (Utils.isNetworkAvailable(PlaceDirectionActivity.this)) {
-            asyncGetDiretion = new AsyncGetDiretion();
-            asyncGetDiretion.execute("patan", "ahmedabad");
-        } else {
-            Utils.displayDialog(PlaceDirectionActivity.this, getString(R.string.app_name), getString(R.string.alert_internet_connectivity));
+        if (directionModel != null) {
+            if (directionModel.getStatus().equalsIgnoreCase("OK")) {
+                if (map != null) {
+                    LatLng latLng = new LatLng(Double.parseDouble(endLat), Double.parseDouble(endLan));
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .title(placeName)
+                            .position(latLng));
+                    marker.showInfoWindow();
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+                }
+
+                List<Step> steplist = directionModel.getRoutes().get(0).getLegs().get(0).getSteps();
+                if (steplist != null && steplist.size() > 0) {
+                    stepList = new ArrayList<>();
+                    stepList.addAll(steplist);
+                    loadStep(stepList);
+                    Leg leg = directionModel.getRoutes().get(0).getLegs().get(0);
+                    if (leg != null) {
+                        LatLng src = new LatLng(leg.getStartLocation().getLat(), leg.getStartLocation().getLng());
+                        LatLng des = new LatLng(leg.getEndLocation().getLat(), leg.getEndLocation().getLng());
+                        drawPathOnMap(src, des, stepList);
+                        tvDistance.setText(leg.getDistance().getText() + " , " + leg.getDuration().getText());
+                    }
+                }
+            }
         }
     }
 
@@ -82,10 +119,12 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
 
         @Override
         protected DirectionModel doInBackground(String... strings) {
-            String source = strings[0];
-            String destination = strings[1];
+            String slat = strings[0];
+            String slan = strings[1];
+            String elat = strings[0];
+            String elan = strings[1];
             wsGetDirection = new WSGetDirection(PlaceDirectionActivity.this);
-            return wsGetDirection.executeWebservice(source, destination, Const.PLACES_API_KEY);
+            return wsGetDirection.executeWebservice(slat, slan, elat, elan, Const.PLACES_API_KEY);
         }
 
         @Override
@@ -93,21 +132,7 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
             super.onPostExecute(directionModel);
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
-                if (directionModel.getStatus().equalsIgnoreCase("OK")) {
-                    List<Step> steplist = directionModel.getRoutes().get(0).getLegs().get(0).getSteps();
-                    if (steplist != null && steplist.size() > 0) {
-                        stepList = new ArrayList<>();
-                        stepList.addAll(steplist);
-                        loadStep(stepList);
-                        Leg leg = directionModel.getRoutes().get(0).getLegs().get(0);
-                        if(leg!=null) {
-                            LatLng src = new LatLng(leg.getStartLocation().getLat(), leg.getStartLocation().getLng());
-                            LatLng des = new LatLng(leg.getEndLocation().getLat(), leg.getEndLocation().getLng());
-                            drawPathOnMap(src, des, stepList);
-                            tvDistance.setText(leg.getDistance().getText()+" , "+leg.getDuration().getText());
-                        }
-                    }
-                }
+
             }
         }
     }

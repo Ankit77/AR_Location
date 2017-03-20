@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.util.Log;
 
+import com.androidexperiments.landmarker.model.direction.DirectionModel;
 import com.google.creativelabs.androidexperiments.typecompass.R;
 
 import java.util.ArrayList;
@@ -25,6 +26,16 @@ public class LandmarkerApplication extends Application
     private static LandmarkerApplication mInstance = null;
     private ArrayList<Point> placeXY=new ArrayList<>();
     private List<Place> places=new ArrayList<>();
+    private DirectionModel directionModel;
+
+    public DirectionModel getDirectionModel() {
+        return directionModel;
+    }
+
+    public void setDirectionModel(DirectionModel directionModel) {
+        this.directionModel = directionModel;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
