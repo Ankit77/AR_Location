@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Landmarker</string>
+    <string name="app_name">NearBy</string>
 
     <string name="intro_finding_you">Finding you!</string>
     <string name="intro_finding_places">Finding places!</string>

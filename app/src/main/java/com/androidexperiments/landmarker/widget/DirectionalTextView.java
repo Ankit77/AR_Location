@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
+import se.walkercrou.places.Place;
 
 /**
  * view that takes big text and little guy
@@ -137,7 +138,7 @@ public class DirectionalTextView extends FrameLayout {
             final ImageView[] imageView = new ImageView[mPlaces.size()];
             for (int i = 0; i < mPlaces.size(); i++) {
                 imageView[i] = new ImageView(mcontext);
-                FrameLayout.LayoutParams Params1 = new FrameLayout.LayoutParams(150, 150);
+                FrameLayout.LayoutParams Params1 = new FrameLayout.LayoutParams(70, 70);
                 imageView[i].setLayoutParams(Params1);
                 imageView[i].setId(i);
 
@@ -147,8 +148,8 @@ public class DirectionalTextView extends FrameLayout {
                 Log.e("POSITION", "POSITION - " + x1);
                 Log.e("POSITION", "POSITION - " + y1);
 
-                imageView[i].setX(LandmarkerApplication.getmInstance().getPlaceXY().get(i).x);
-                imageView[i].setY(LandmarkerApplication.getmInstance().getPlaceXY().get(i).y);
+                imageView[i].setX(LandmarkerApplication.getmInstance().getPlaceXY().get(i).getPoint().x);
+                imageView[i].setY(LandmarkerApplication.getmInstance().getPlaceXY().get(i).getPoint().y);
                 imageView[i].setBackgroundColor(Color.TRANSPARENT);
                 Glide.with(mcontext).load(mPlaces.get(i).getPlaceurl())
                         .thumbnail(0.5f).placeholder(R.drawable.location_pin)
@@ -161,7 +162,7 @@ public class DirectionalTextView extends FrameLayout {
 //                        mCurrentPlace = event.place;
 //                        showMapsButtonView();
                         if (onPlaceClick != null) {
-                            onPlaceClick.onClick(mPlaces.get(((ImageView) v).getId()));
+                            onPlaceClick.onClick(LandmarkerApplication.getmInstance().getPlaceXY().get(((ImageView) v).getId()).getPlace());
                         }
 //                        Toast.makeText(mcontext, ((TextView) v).getText().toString(), Toast.LENGTH_LONG).show();
                     }
@@ -386,6 +387,6 @@ public class DirectionalTextView extends FrameLayout {
     }
 
     public interface onPlaceClick {
-        public void onClick(NearbyPlace nearbyPlace);
+        public void onClick(Place place);
     }
 }

@@ -46,8 +46,6 @@ import java.util.List;
  */
 
 public class PlaceDetailActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, ImagesAdapter.ImageClickListner {
-    private Place placeInfo;
-    private String placeId;
     private AsyncLoadPlaceDetail asyncLoadPlaceDetail;
     private LinearLayout llmap;
     private LinearLayout llcall;
@@ -73,23 +71,27 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
     private LatLng startLocation;
     private LatLng endLocation;
     private ProgressDialog progressDialog;
-    private String startLat;
-    private String startLan;
-    private String endLat;
-    private String endLan;
+    private Double endLat;
+    private Double endLan;
     private Toolbar toolbar;
     private ImageView imgBack;
     private TextView tvTitle;
     private PlaceDetailModel mPlaceDetailModel;
+    private String placeId;
+    private String placeName;
+    private TextView tvLabelWorkingHours;
+    private LinearLayout llWorkingHours;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placeinfo);
-        startLat = "23.0306663";
-        startLan = "72.5706515";
-        endLat = "23.0225099";
-        endLan = "72.57143099999999";
+        if (getIntent().getExtras() != null) {
+            placeId = getIntent().getExtras().getString(Const.KEY_PLACEID, "");
+            placeName = getIntent().getExtras().getString(Const.KEY_PLACENAME, "");
+            endLat = getIntent().getExtras().getDouble(Const.KEY_LAT, 0.0);
+            endLan = getIntent().getExtras().getDouble(Const.KEY_LAN, 0.0);
+        }
         mapView = (MapView) findViewById(R.id.activity_placeinfo_mapview);
         mapView.onCreate(savedInstanceState);
         init();
@@ -113,6 +115,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
         rvReviews = (RecyclerView) findViewById(R.id.activity_placeinfo_rv_reviews);
         imgBack = (ImageView) findViewById(R.id.activity_placeinfo_img_back);
         tvTitle = (TextView) findViewById(R.id.activity_placeinfo_tv_title);
+        tvLabelWorkingHours = (TextView) findViewById(R.id.activity_placeinfo_tv_lblworkinghr);
+        llWorkingHours = (LinearLayout) findViewById(R.id.activity_placeinfo_ll_workinghr);
 
         mapView.getMapAsync(this);
         llcall.setOnClickListener(this);
@@ -124,14 +128,14 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
         rvReviews.setNestedScrollingEnabled(false);
         if (Utils.isNetworkAvailable(PlaceDetailActivity.this)) {
             asyncGetDiretion = new AsyncGetDiretion();
-            asyncGetDiretion.execute(startLat, startLan, endLat, endLan);
+            asyncGetDiretion.execute(String.valueOf(LandmarkerApplication.getmInstance().getCurrentLocation().getLatitude()), String.valueOf(LandmarkerApplication.getmInstance().getCurrentLocation().getLongitude()), String.valueOf(endLat), String.valueOf(endLan));
         } else {
             Utils.displayDialog(PlaceDetailActivity.this, getString(R.string.app_name), getString(R.string.alert_internet_connectivity));
         }
     }
 
     private void loadData(PlaceDetailModel placeDetailModel) {
-        LatLng latLng = new LatLng(Double.parseDouble(endLat), Double.parseDouble(endLan));
+        LatLng latLng = new LatLng(endLat, endLan);
         if (map != null) {
             Marker marker = map.addMarker(new MarkerOptions()
                     .title(placeDetailModel.getResult().getName())
@@ -196,10 +200,10 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
             startActivity(callIntent);
         } else if (view == llmap) {
             Intent intent = new Intent(PlaceDetailActivity.this, PlaceDirectionActivity.class);
-            intent.putExtra(Const.KEY_SLAT, String.valueOf(startLocation.latitude));
-            intent.putExtra(Const.KEY_SLAN, String.valueOf(startLocation.longitude));
-            intent.putExtra(Const.KEY_ELAT, String.valueOf(endLocation.latitude));
-            intent.putExtra(Const.KEY_ELAN, String.valueOf(endLocation.longitude));
+            intent.putExtra(Const.KEY_SLAT, LandmarkerApplication.getmInstance().getCurrentLocation().getLatitude());
+            intent.putExtra(Const.KEY_SLAN, LandmarkerApplication.getmInstance().getCurrentLocation().getLongitude());
+            intent.putExtra(Const.KEY_ELAT, endLat);
+            intent.putExtra(Const.KEY_ELAN, endLan);
             intent.putExtra(Const.KEY_PLACENAME, mPlaceDetailModel.getResult().getName());
             intent.putExtra(Const.KEY_TITLE, mPlaceDetailModel.getResult().getName());
             startActivity(intent);
@@ -272,11 +276,15 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
                     } else {
                         tvWorkingNow.setText(R.string.alert_close_now);
                     }
+                    tvLabelWorkingHours.setVisibility(View.VISIBLE);
+                    llWorkingHours.setVisibility(View.VISIBLE);
                     loadWorkingHours(placeDetailModel.getResult().getOpeningHours().getWeekdayText());
+                } else {
+                    tvLabelWorkingHours.setVisibility(View.GONE);
+                    llWorkingHours.setVisibility(View.GONE);
                 }
 
                 if (placeDetailModel.getResult() != null && placeDetailModel.getResult().getReviews() != null) {
-
                     loadPReviews(placeDetailModel.getResult().getReviews());
                 }
             }
@@ -318,7 +326,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
             }
 
             asyncLoadPlaceDetail = new AsyncLoadPlaceDetail();
-            asyncLoadPlaceDetail.execute("ChIJs-eWozubXjkRiux63_B6rbE");
+            asyncLoadPlaceDetail.execute(placeId);
         }
     }
 

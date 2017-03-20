@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:cardBackgroundColor="#D5D8DC"
+        card_view:cardBackgroundColor="@color/color_white"
         card_view:cardCornerRadius="4dp">
 
         <RelativeLayout
@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/row_activity_placecategory_img_category"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
@@ -36,7 +36,7 @@
                 android:layout_toRightOf="@+id/row_activity_placecategory_img_category"
                 android:text="dsdsdsdsd"
                 android:textColor="@android:color/black"
-                android:textSize="22sp"
+                android:textSize="@dimen/_14sdp"
                 android:textStyle="bold" />
 
             <CheckBox

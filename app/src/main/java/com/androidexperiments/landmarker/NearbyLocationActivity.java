@@ -10,7 +10,10 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.androidexperiments.landmarker.model.PlaceModel;
 import com.androidexperiments.landmarker.util.Const;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,7 +44,7 @@ import se.walkercrou.places.Place;
 
 public class NearbyLocationActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     private MapView mapView;
     private GoogleMap map;
@@ -49,10 +52,9 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
     private Location mLastLocation;
     private AsyncLoadNearbyPlace asyncLoadNearbyPlace;
     private GooglePlaces mPlacesApi;
-//    private static final String PLACES_API_KEY = "AIzaSyAGvJJTXVY_OGyqlbiiFU9fUXIMG5hAu8I";
-
     private static final double MAX_RADIUS = 1000;
     private String placeCategory;
+    private ImageView imgBack;
 
     private void buildPlacesApi() {
         mPlacesApi = new GooglePlaces(Const.PLACES_API_KEY);
@@ -68,8 +70,8 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
         }
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
-
-
+        imgBack = (ImageView) findViewById(R.id.activity_nearby_img_back);
+        imgBack.setOnClickListener(this);
         mGoogleApiClient = new GoogleApiClient.Builder(NearbyLocationActivity.this)
                 .addApi(LocationServices.API)
                 .addApi(Places.GEO_DATA_API)
@@ -91,7 +93,7 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
         }
 
         map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentlocation, 15));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentlocation, 12));
 
         map.addMarker(new MarkerOptions()
                 .title("MyLocation")
@@ -125,6 +127,13 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
 
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view == imgBack) {
+            finish();
+        }
+    }
+
     private class AsyncLoadNearbyPlace extends AsyncTask<Void, Void, List<Place>> {
         private ProgressDialog progressDialog;
 
@@ -149,7 +158,7 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
                 e.printStackTrace();
             }
             try {
-                places = mPlacesApi.getNearbyPlaces(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MAX_RADIUS, 60, param);
+                places = mPlacesApi.getNearbyPlaces(mLastLocation.getLatitude(), mLastLocation.getLongitude(), (LandmarkerApplication.getmInstance().getSharedPreferences().getInt(Const.PREF_RADIUS, Const.DEFAULT_RADIUS) * 1000), Const.PLACE_LIMIT, param);
             } catch (Exception e) {
                 //if getNearbyPlaces fails, return null and directional will do what it needs to
                 e.printStackTrace();
@@ -169,21 +178,18 @@ public class NearbyLocationActivity extends AppCompatActivity implements OnMapRe
                         Marker marker = map.addMarker(new MarkerOptions()
                                 .title(places.get(i).getName())
                                 .position(sydney));
-
                         Projection projection = map.getProjection();
                         LatLng markerLocation = marker.getPosition();
                         Point screenPosition = projection.toScreenLocation(markerLocation);
                         Log.e("Position", "position - " + screenPosition.x);
                         Log.e("Position", "position - " + screenPosition.y);
-                        LandmarkerApplication.getmInstance().getPlaceXY().add(screenPosition);
+                        LandmarkerApplication.getmInstance().getPlaceXY().add(new PlaceModel(screenPosition, places.get(i)));
                     }
                 }
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
-
                         startActivity(new Intent(NearbyLocationActivity.this, MainActivity.class));
                     }
                 }, 5000);

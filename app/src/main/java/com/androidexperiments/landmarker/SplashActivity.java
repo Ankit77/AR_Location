@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.androidexperiments.landmarker.service.LocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -28,13 +29,14 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     protected GoogleApiClient mGoogleApiClient;
     protected LocationRequest locationRequest;
     int REQUEST_CHECK_SETTINGS = 100;
-    private int LOCATION_PERMISSION_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_splash);
         buildLocation();
+        Intent intent = new Intent(SplashActivity.this, LocationService.class);
+        startService(intent);
     }
 
     private void buildLocation() {
@@ -43,7 +45,6 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).build();
         mGoogleApiClient.connect();
-
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(30 * 1000);
@@ -86,7 +87,6 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 }
                 // NO need to show the dialog;
                 runSplash();
-
                 break;
 
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -95,7 +95,6 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 try {
                     // Show the dialog by calling startResolutionForResult(), and check the result
                     // in onActivityResult().
-
                     status.startResolutionForResult(SplashActivity.this, REQUEST_CHECK_SETTINGS);
 
                 } catch (IntentSender.SendIntentException e) {

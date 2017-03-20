@@ -46,10 +46,10 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
     private DirectionAdapter diretionAdapter;
     private ArrayList<Step> stepList;
     private TextView tvDistance;
-    private String startLat;
-    private String startLan;
-    private String endLat;
-    private String endLan;
+    private Double startLat;
+    private Double startLan;
+    private Double endLat;
+    private Double endLan;
     private DirectionModel directionModel;
     private String placeName;
     private TextView tvTitle;
@@ -66,10 +66,10 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
         imgBack = (ImageView) findViewById(R.id.activity_placedirection_img_back);
         directionModel = LandmarkerApplication.getmInstance().getDirectionModel();
         if (getIntent().getExtras() != null) {
-            startLat = getIntent().getExtras().getString(Const.KEY_SLAT);
-            startLan = getIntent().getExtras().getString(Const.KEY_SLAN);
-            endLat = getIntent().getExtras().getString(Const.KEY_ELAT);
-            endLan = getIntent().getExtras().getString(Const.KEY_ELAN);
+            startLat = getIntent().getExtras().getDouble(Const.KEY_SLAT);
+            startLan = getIntent().getExtras().getDouble(Const.KEY_SLAN);
+            endLat = getIntent().getExtras().getDouble(Const.KEY_ELAT);
+            endLan = getIntent().getExtras().getDouble(Const.KEY_ELAN);
             placeName = getIntent().getExtras().getString(Const.KEY_PLACENAME);
             title = getIntent().getExtras().getString(Const.KEY_TITLE, "");
         }
@@ -111,7 +111,7 @@ public class PlaceDirectionActivity extends AppCompatActivity implements OnMapRe
         if (directionModel != null) {
             if (directionModel.getStatus().equalsIgnoreCase("OK")) {
                 if (map != null) {
-                    LatLng latLng = new LatLng(Double.parseDouble(endLat), Double.parseDouble(endLan));
+                    LatLng latLng = new LatLng(endLat, endLan);
                     Marker marker = map.addMarker(new MarkerOptions()
                             .title(placeName)
                             .position(latLng));

@@ -85,6 +85,8 @@
             android:screenOrientation="portrait">
 
         </activity>
+
+        <service android:name="com.androidexperiments.landmarker.service.LocationService"></service>
     </application>
 
 </manifest>

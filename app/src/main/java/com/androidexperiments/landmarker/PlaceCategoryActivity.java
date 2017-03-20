@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.androidexperiments.landmarker.adapter.PlaceCategoryAdapter;
 import com.androidexperiments.landmarker.model.PlaceCategoryModel;
@@ -30,11 +31,13 @@ public class PlaceCategoryActivity extends AppCompatActivity implements View.OnC
     private PlaceCategoryAdapter placeCategoryAdapter;
     private Button btnNearBy;
     private MarkerSeekBar markerSeekBar;
+    private TextView tvRadius;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placecategory);
+        tvRadius = (TextView) findViewById(R.id.activity_placecategory_tvRadius);
         btnNearBy = (Button) findViewById(R.id.activity_placecategory_btn_nearbyplace);
         rvCategory = (RecyclerView) findViewById(R.id.activity_placecategory_rvCategory);
         markerSeekBar = (MarkerSeekBar) findViewById(R.id.activity_placecategory_sbRadius);
@@ -44,13 +47,16 @@ public class PlaceCategoryActivity extends AppCompatActivity implements View.OnC
         rvCategory.setLayoutManager(mLayoutManager);
         rvCategory.setAdapter(placeCategoryAdapter);
         btnNearBy.setOnClickListener(this);
-        markerSeekBar.setProgress(10);
+        tvRadius.setText("Current Radius : " + LandmarkerApplication.getmInstance().getSharedPreferences().getInt(Const.PREF_RADIUS, Const.DEFAULT_RADIUS) + "km");
+        markerSeekBar.setProgress(LandmarkerApplication.getmInstance().getSharedPreferences().getInt(Const.PREF_RADIUS, Const.DEFAULT_RADIUS));
         markerSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                SharedPreferences.Editor editor=  LandmarkerApplication.getmInstance().getSharedPreferences().edit();
-                editor.putInt(Const.PREF_RADIUS,i);
+                SharedPreferences.Editor editor = LandmarkerApplication.getmInstance().getSharedPreferences().edit();
+                editor.putInt(Const.PREF_RADIUS, i);
                 editor.commit();
+                tvRadius.setText("Current Radius : " + i + "km");
+
             }
 
             @Override

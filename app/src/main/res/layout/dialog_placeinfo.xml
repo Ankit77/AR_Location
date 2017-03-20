@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CC000000"
+    android:orientation="vertical"
+    android:padding="@dimen/_10sdp">
+
+    <TextView
+        android:id="@+id/dialog_placeinfo_tv_placename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:padding="@dimen/_5sdp"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/_14sdp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dialog_placeinfo_tv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="2"
+        android:padding="@dimen/_5sdp"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="normal" />
+
+    <Button
+        android:id="@+id/dialog_placeinfo_btn_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Get Place Detail"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/_16sdp" />
+
+</LinearLayout>

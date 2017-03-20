@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.util.Log;
 
+import com.androidexperiments.landmarker.model.PlaceModel;
 import com.androidexperiments.landmarker.model.direction.DirectionModel;
 import com.androidexperiments.landmarker.model.placedetail.Photo;
 import com.google.creativelabs.androidexperiments.typecompass.R;
@@ -26,11 +27,12 @@ public class LandmarkerApplication extends Application {
     private int deviceHeight;
     private int deviceWidth;
     private static LandmarkerApplication mInstance = null;
-    private ArrayList<Point> placeXY = new ArrayList<>();
+    private ArrayList<PlaceModel> placeXY = new ArrayList<>();
     private List<Place> places = new ArrayList<>();
     private List<Photo> placesphotos = new ArrayList<>();
     private DirectionModel directionModel;
     private SharedPreferences sharedPreferences;
+
     public DirectionModel getDirectionModel() {
         return directionModel;
     }
@@ -62,7 +64,7 @@ public class LandmarkerApplication extends Application {
         this.currentLocation = currentLocation;
     }
 
-    public ArrayList<Point> getPlaceXY() {
+    public ArrayList<PlaceModel> getPlaceXY() {
         return placeXY;
     }
 
@@ -74,7 +76,7 @@ public class LandmarkerApplication extends Application {
         this.places = places;
     }
 
-    public void setPlaceXY(ArrayList<Point> placeXY) {
+    public void setPlaceXY(ArrayList<PlaceModel> placeXY) {
         this.placeXY = placeXY;
     }
 

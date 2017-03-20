@@ -11,5 +11,6 @@
     <color name="transparent_red">#66EA4949</color>
     <color name="main_color_gray_lt">#ffa1a1a1</color>
     <color name="contactlist_bg">#C1BEC2</color>
+    <color name="color_grey">#E5E1E6</color>
 
 </resources>

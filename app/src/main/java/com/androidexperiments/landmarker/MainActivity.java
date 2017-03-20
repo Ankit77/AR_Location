@@ -1,5 +1,6 @@
 package com.androidexperiments.landmarker;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.hardware.Camera;
@@ -9,17 +10,25 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidexperiments.landmarker.data.NearbyPlace;
 import com.androidexperiments.landmarker.sensors.HeadTracker;
+import com.androidexperiments.landmarker.util.Const;
 import com.androidexperiments.landmarker.util.HeadTransform;
 import com.androidexperiments.landmarker.widget.DirectionalTextView;
 import com.androidexperiments.landmarker.widget.DirectionalTextViewContainer;
@@ -50,10 +59,8 @@ public class MainActivity extends BaseActivity implements
     SwingPhoneView mSwingPhoneView;
     @InjectView(R.id.directional_text_view_container)
     DirectionalTextViewContainer mDirectionalTextViewContainer;
-    @InjectView(R.id.maps_button_view_container)
-    View mMapsButtonViewContainer;
 
-    private NearbyPlace mCurrentPlace;
+    private Place mCurrentPlace;
     private HeadTracker mHeadTracker;
     private HeadTransform mHeadTransform;
     private Handler mTrackingHandler = new Handler();
@@ -163,66 +170,10 @@ public class MainActivity extends BaseActivity implements
         super.onStop();
     }
 
-    //butterknife
-
-    @OnClick(R.id.maps_button_view)
-    public void onMapsButtonClick() {
-        if (mCurrentPlace == null) {
-            Log.w(TAG, "No currentPlace available - must be empty. Ignore click.");
-            return;
-        }
-
-        try {
-            Intent intent = new Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("geo:0,0?q=" + URLEncoder.encode(mCurrentPlace.getName(), "UTF-8"))
-            );
-            //cheating!
-            intent.setPackage("com.google.android.apps.maps");
-            startActivity(intent);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @OnClick(R.id.maps_button_close)
-    public void onMapsViewCloseClicked() {
-        hideMapsButtonView();
-    }
-
-    @OnClick(R.id.maps_button_view_container)
-    public void onContainerClick() {
-        //do nothing - just need registered for onClick so it doesnt get passed through
-    }
-
-    //overrides
-
     @Override
     public void onBackPressed() {
-        if (mMapsButtonViewContainer.getVisibility() == View.VISIBLE)
-            hideMapsButtonView();
-        else
-            super.onBackPressed();
+        super.onBackPressed();
     }
-
-
-    //event bus
-
-
-    private void showMapsButtonView() {
-        mMapsButtonViewContainer.setVisibility(View.VISIBLE);
-        Animation anim = new AlphaAnimation(0.f, 1.f);
-        anim.setDuration(300);
-        mMapsButtonViewContainer.startAnimation(anim);
-    }
-
-    private void hideMapsButtonView() {
-        mMapsButtonViewContainer.setVisibility(View.GONE);
-        Animation anim = new AlphaAnimation(1.f, 0.f);
-        anim.setDuration(300);
-        mMapsButtonViewContainer.startAnimation(anim);
-    }
-
 
     private void getNewPlaces() {
         //update introview
@@ -392,9 +343,44 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClick(NearbyPlace nearbyPlace) {
-        mCurrentPlace = nearbyPlace;
-        showMapsButtonView();
-        Toast.makeText(MainActivity.this, nearbyPlace.getName(), Toast.LENGTH_LONG).show();
+    public void onClick(Place place) {
+        mCurrentPlace = place;
+//        showMapsButtonView();
+        showPostposndVisitDailog(place);
+        Toast.makeText(MainActivity.this, mCurrentPlace.getName(), Toast.LENGTH_LONG).show();
+    }
+
+
+    private void showPostposndVisitDailog(final Place place) {
+//        // custom dialog
+        final Dialog dialog = new Dialog(MainActivity.this);
+
+        dialog.setContentView(R.layout.dialog_placeinfo);
+        // set the custom dialog components - text, image and button
+        final TextView tvPlaceName = (TextView) dialog.findViewById(R.id.dialog_placeinfo_tv_placename);
+        final TextView tvPlaceAddress = (TextView) dialog.findViewById(R.id.dialog_placeinfo_tv_address);
+        Button btnPlaceDetail = (Button) dialog.findViewById(R.id.dialog_placeinfo_btn_detail);
+        tvPlaceName.setText(place.getName());
+        tvPlaceAddress.setText(place.getVicinity());
+        btnPlaceDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, PlaceDetailActivity.class);
+                intent.putExtra(Const.KEY_PLACEID, place.getPlaceId());
+                intent.putExtra(Const.KEY_PLACENAME, place.getName());
+                intent.putExtra(Const.KEY_LAT, place.getLatitude());
+                intent.putExtra(Const.KEY_LAN, place.getLongitude());
+                startActivity(intent);
+            }
+        });
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = dialog.getWindow();
+        lp.copyFrom(window.getAttributes());
+//This makes the dialog take up the full width
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+        dialog.show();
+
     }
 }
