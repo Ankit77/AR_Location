@@ -2,7 +2,6 @@ package com.androidexperiments.landmarker;
 
 import android.content.Intent;
 import android.content.IntentSender;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -25,7 +24,6 @@ import com.google.creativelabs.androidexperiments.typecompass.R;
  * Splash shit
  */
 public class SplashActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<LocationSettingsResult> {
-    private static final String TAG = SplashActivity.class.getSimpleName();
     protected GoogleApiClient mGoogleApiClient;
     protected LocationRequest locationRequest;
     int REQUEST_CHECK_SETTINGS = 100;
@@ -35,8 +33,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_splash);
         buildLocation();
-        Intent intent = new Intent(SplashActivity.this, LocationService.class);
-        startService(intent);
+
     }
 
     private void buildLocation() {
@@ -80,11 +77,12 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
         final Status status = locationSettingsResult.getStatus();
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
-                Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                        mGoogleApiClient);
-                if (mLastLocation != null) {
-                    LandmarkerApplication.getmInstance().setCurrentLocation(mLastLocation);
-                }
+
+//                Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+//                        mGoogleApiClient);
+//                if (mLastLocation != null) {
+//                    LandmarkerApplication.getmInstance().setCurrentLocation(mLastLocation);
+//                }
                 // NO need to show the dialog;
                 runSplash();
                 break;
@@ -115,11 +113,11 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
         if (requestCode == REQUEST_CHECK_SETTINGS) {
 
             if (resultCode == RESULT_OK) {
-                Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                        mGoogleApiClient);
-                if (mLastLocation != null) {
-                    LandmarkerApplication.getmInstance().setCurrentLocation(mLastLocation);
-                }
+//                Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+//                        mGoogleApiClient);
+//                if (mLastLocation != null) {
+//                    LandmarkerApplication.getmInstance().setCurrentLocation(mLastLocation);
+//                }
                 runSplash();
             }
 
@@ -127,6 +125,8 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     }
 
     private void runSplash() {
+        Intent intent = new Intent(SplashActivity.this, LocationService.class);
+        startService(intent);
         new Handler().postDelayed(new Runnable() {
 
 			/*

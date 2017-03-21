@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
-    private ArrayList<Review> reviewList=new ArrayList<>();
+    private ArrayList<Review> reviewList = new ArrayList<>();
     private Context context;
 
 
@@ -46,7 +46,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         }
         viewHolder.tvUsername.setText(review.getAuthorName());
         viewHolder.tvReview.setText(review.getText());
-        viewHolder.rbRate.setRating(review.getRating());
+        if (review.getRating() != null) {
+            viewHolder.rbRate.setRating(review.getRating());
+        } else {
+            viewHolder.rbRate.setRating(0.0f);
+        }
+
     }
 
     @Override

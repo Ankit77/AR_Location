@@ -29,7 +29,6 @@ import com.androidexperiments.landmarker.util.Const;
 import com.androidexperiments.landmarker.util.Utils;
 import com.androidexperiments.landmarker.webservice.WSGetDirection;
 import com.androidexperiments.landmarker.webservice.WSGetPlaceDetail;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -94,7 +93,11 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
         }
         mapView = (MapView) findViewById(R.id.activity_placeinfo_mapview);
         mapView.onCreate(savedInstanceState);
-        init();
+        if (LandmarkerApplication.getmInstance().getCurrentLocation() != null) {
+            init();
+        } else {
+            Utils.displayDialog(PlaceDetailActivity.this, getString(R.string.app_name), getString(R.string.alert_empty_current_location));
+        }
 
     }
 
@@ -158,7 +161,11 @@ public class PlaceDetailActivity extends AppCompatActivity implements View.OnCli
 
         tvTitle.setText(placeDetailModel.getResult().getName());
         tvPlaceFullName.setText(placeDetailModel.getResult().getName());
-        rbRate.setRating(Float.parseFloat(placeDetailModel.getResult().getRating().toString()));
+        if (placeDetailModel.getResult().getRating() != null) {
+            rbRate.setRating(Float.parseFloat(placeDetailModel.getResult().getRating().toString()));
+        } else {
+            rbRate.setRating(0.0f);
+        }
         tvFullAddress.setText(placeDetailModel.getResult().getFormattedAddress());
         tvDistance.setText("Distance : - " + distance);
 

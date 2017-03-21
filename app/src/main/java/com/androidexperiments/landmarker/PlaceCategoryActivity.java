@@ -16,6 +16,7 @@ import com.androidexperiments.landmarker.adapter.PlaceCategoryAdapter;
 import com.androidexperiments.landmarker.model.PlaceCategoryModel;
 import com.androidexperiments.landmarker.seekbar.MarkerSeekBar;
 import com.androidexperiments.landmarker.util.Const;
+import com.androidexperiments.landmarker.util.Utils;
 import com.google.creativelabs.androidexperiments.typecompass.R;
 
 import java.util.ArrayList;
@@ -114,18 +115,22 @@ public class PlaceCategoryActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         if (v == btnNearBy) {
-            String placeCategory = "";
-            ArrayList<PlaceCategoryModel> mplaceCategory = new ArrayList<>();
-            mplaceCategory = placeCategoryAdapter.getCategoryList();
-            for (int i = 0; i < mplaceCategory.size(); i++) {
-                if (mplaceCategory.get(i).isSelect()) {
-                    placeCategory = placeCategory + mplaceCategory.get(i).getPlaceCategory() + "|";
+            if (LandmarkerApplication.getmInstance().getCurrentLocation() != null) {
+                String placeCategory = "";
+                ArrayList<PlaceCategoryModel> mplaceCategory = new ArrayList<>();
+                mplaceCategory = placeCategoryAdapter.getCategoryList();
+                for (int i = 0; i < mplaceCategory.size(); i++) {
+                    if (mplaceCategory.get(i).isSelect()) {
+                        placeCategory = placeCategory + mplaceCategory.get(i).getPlaceCategory() + "|";
+                    }
                 }
+                placeCategory = placeCategory.substring(0, placeCategory.length() - 1);
+                Intent intent = new Intent(PlaceCategoryActivity.this, NearbyLocationActivity.class);
+                intent.putExtra("CATEGORY", placeCategory);
+                startActivity(intent);
+            } else {
+                Utils.displayDialog(PlaceCategoryActivity.this, getString(R.string.app_name), getString(R.string.alert_empty_current_location));
             }
-            placeCategory = placeCategory.substring(0, placeCategory.length() - 1);
-            Intent intent = new Intent(PlaceCategoryActivity.this, NearbyLocationActivity.class);
-            intent.putExtra("CATEGORY", placeCategory);
-            startActivity(intent);
 
         }
     }
